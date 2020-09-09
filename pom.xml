@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.3.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>aaap.ch.harvest-forecast-client</groupId>
+	<artifactId>harvest-forecast-client</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>harvest-forecast-client</name>
+	<description>Client for Harvest Forecast</description>
+
+	<properties>
+		<java.version>14</java.version>
+		<swagger-annotations-version>1.6.2</swagger-annotations-version>
+		<google-code-findbugs-version>3.0.2</google-code-findbugs-version>
+		<jackson-databind-nullable-version>0.2.1</jackson-databind-nullable-version>
+		<openapi-generator-maven-plugin-version>4.3.1</openapi-generator-maven-plugin-version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
+		</dependency>
+
+		<!-- HTTP client: Spring RestTemplate -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${swagger-annotations-version}</version>
+		</dependency>
+
+		<!-- @Nullable annotation -->
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<version>${google-code-findbugs-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+		</dependency>
+
+		<!-- JSON processing: jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>${jackson-databind-nullable-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin-version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/harvest-forecast-api.yaml</inputSpec>
+							<generatorName>java</generatorName>
+							<library>webclient</library>
+							<configOptions>
+								<dateLibrary>java8</dateLibrary>
+							</configOptions>
+							<output>${project.build.directory}/generated-sources</output>
+							<apiPackage>ch.aaap.harvestforecastclient.api</apiPackage>
+							<modelPackage>ch.aaap.harvestforecastclient.model</modelPackage>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
