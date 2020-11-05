@@ -1,0 +1,16 @@
+{
+  "name": "admin-harvest-forecast-client",
+  "version": "0.0.0",
+  "repository": "git@github.com:3AP-AG/harvest-forecast-client.git",
+  "private": true,
+  "devDependencies": {
+    "prettier": "^2.1.2",
+    "speccy": "^0.11.0"
+  },
+  "scripts": {
+    "pretty:check": "prettier --check './src/**/*.yaml'",
+    "pretty:write": "prettier --write './src/**/*.yaml'",
+    "lint": "speccy lint src/main/resources/harvest-forecast-api.yaml --skip parameter-description",
+    "serve": "speccy serve src/main/resources/harvest-forecast-api.yaml"
+  }
+}
