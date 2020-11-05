@@ -1,0 +1,17 @@
+{
+  "name": "admin-harvest-forecast-client",
+  "version": "0.0.0",
+  "repository": "git@github.com:3AP-AG/harvest-forecast-client.git",
+  "author": "James Young <hello@jamesyoung.ch>",
+  "private": true,
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.1.3",
+    "prettier": "^2.1.2",
+    "speccy": "^0.11.0"
+  },
+  "scripts": {
+    "pretty:check": "prettier --check './src/spec/**/*.yaml'",
+    "pretty:write": "prettier --write './src/spec/**/*.yaml'",
+    "speccy:lint": "speccy lint './src/spec/harvest-forcast.oas3.yaml'"
+  }
+}
