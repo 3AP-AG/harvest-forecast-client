@@ -1,171 +1,872 @@
 openapi: 3.0.1
+
 info:
-  title: Harvest Forecast 
-  description: 'API Overview for Harvest Forecast'
+  title: Harvest Forecast API
+  version: v0.1.0
   contact:
-    email: cyril@3ap.ch
-  license:
-    name: MIT License
-    url: https://opensource.org/licenses/MIT
-  version: 1.0.0
+    name: Harvest API Support
+    email: support@harvestapp.com
+    url: https://www.getharvest.com/contact
+
 externalDocs:
-  description: Harvest Forecast
+  description: "Forcast docs: getharvest.com/forecast"
   url: https://www.getharvest.com/forecast
+
 servers:
-- url: https://api.forecastapp.com
+  - url: https://api.forecastapp.com
+
+security:
+  - forecast_auth: []
+  - forecast_account_id: []
+
 tags:
-- name: whoamI
-  description: Who am I
-- name: people
-  description: Get details of peoplep
-- name: user
-  description: Operations about user
-  externalDocs:
-    description: Find out more about our store
-    url: http://swagger.io
+  - name: assignments
+    description: |
+      Create, Update, and Delete an Assignment, and List all Assignments
+  - name: clients
+    description: Read a Client, and list all Clients
+  - name: milestones
+    description: List all Milestones
+  - name: people
+    description: Read a Person, and list all People
+  - name: placeholders
+    description: List all Placeholders
+  - name: projects
+    description: Read a Project, list all Projects, and push to Harvest
+  - name: roles
+    description: List all Roles
+  - name: whoami
+    description: Get info about the currently authenticated user
+
 paths:
+  # whoami
   /whoami:
     get:
-      tags:
-      - whoamI
-      summary: Get Info about the logged in User
-      operationId: getWhoAmI
+      summary: Get info about the currently authenticated user
+      operationId: whoami
       responses:
-        200:
-          description: successful operation
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CurrentUser'
-      security: 
-      - forecast_auth: []
-      - forecast_account_id: []
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/whoami_response"
+      tags:
+        - whoami
+
+  # people
   /people:
     get:
-      tags:
-      - people
-      summary: Get details of all persons
-      operationId: getPeople
+      summary: List all People
+      operationId: listPeople
       responses:
-        200:
-          description: successful operation
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/People'
-      security: 
-      - forecast_auth: []
-      - forecast_account_id: []    
-  /people/{id}:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedArrayOfPeople"
+      tags:
+        - people
+  /people/{personId}:
     get:
-      tags:
-      - people
-      summary: GetGet specific person by id
-      operationId: getPersonById
+      summary: Read a Person
+      operationId: readPerson
       parameters:
-      - name: id
-        in: path
-        description: 'The id of the user'
-        required: true
-        schema:
-          type: integer
+        - name: personId
+          in: path
+          schema:
+            $ref: "#/components/schemas/id"
+          required: true
+
       responses:
-        200:
-          description: successful operation
+        "404":
+          description: |
+            Not Found; The requested Person could not be found.
+            (You may not be authorized to read this Person).
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Person'
-        404:
-          description: Person not found
-          content: {}   
-      security: 
-      - forecast_auth: []
-      - forecast_account_id: []        
+                $ref: "#/components/schemas/http_error_generic_4xx_5xx"
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedPerson"
+      tags:
+        - people
+
+  # projects
+  /projects:
+    get:
+      summary: List all Projects
+      operationId: listProjects
+      responses:
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedArrayOfProjects"
+      tags:
+        - projects
+  /projects/{projectId}:
+    get:
+      summary: Read a single Project
+      operationId: readProject
+      parameters:
+        - name: projectId
+          in: path
+          schema:
+            $ref: "#/components/schemas/id"
+          required: true
+      responses:
+        "400":
+          description: |
+            Not Found; The requested Project could not be found.
+            (You may not be authorized to read this Project).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_generic_4xx_5xx"
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedProject"
+      tags:
+        - projects
+
+  # clients
+  /clients:
+    get:
+      summary: Lias all clients
+      operationId: listClients
+      responses:
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedArrayOfClients"
+      tags:
+        - clients
+  /clients/{clientId}:
+    get:
+      summary: Read a Client
+      operationId: readClient
+      parameters:
+        - name: clientId
+          in: path
+          schema:
+            $ref: "#/components/schemas/id"
+          required: true
+      responses:
+        "400":
+          description: |
+            Not Found; The requested Client could not be found.
+            (You may not be authorized to read this Client).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_generic_4xx_5xx"
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedClient"
+      tags:
+        - clients
+
+  # roles
+  /roles:
+    get:
+      summary: List all Roles
+      operationId: listRoles
+      responses:
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedArrayOfRoles"
+      tags:
+        - roles
+
+  # placeholders
+  /placeholders:
+    get:
+      summary: List all Placeholders
+      operationId: listPlaceholders
+      responses:
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedArrayOfPlaceholders"
+      tags:
+        - placeholders
+
+  # assignments
+  /assignments:
+    get:
+      summary: List all Assignments
+      operationId: listAssignments
+      parameters:
+        - name: start_date
+          in: query
+          schema:
+            $ref: "#/components/schemas/date"
+          required: false
+        - name: state
+          in: query
+          schema:
+            type: string
+            example: "active"
+          required: false
+        - name: project_id
+          in: query
+          schema:
+            $ref: "#/components/schemas/id"
+          required: false
+        - name: repeated_assignment_set_id
+          in: query
+          schema:
+            $ref: "#/components/schemas/id"
+      responses:
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedArrayOfAssignments"
+      tags:
+        - assignments
+    post:
+      summary: Create an Assignment
+      operationId: createAssignment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/assignment_create_body"
+        required: false
+      responses:
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedAssignment"
+      tags:
+        - assignments
+  /assignments/{assignmentId}:
+    patch:
+      summary: Update an Assignment
+      operationId: updateAssignment
+      parameters:
+        - name: assignmentId
+          in: path
+          schema:
+            $ref: "#/components/schemas/id"
+          required: true
+      requestBody:
+        description: |
+          A partial Assignment. Fields can be omitted if they do not need to be updated.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/assignment_create_body"
+        required: true
+      responses:
+        "400":
+          description: |
+            Not Found; The requested Assignment could not be found.
+            (You may not be authorized to read this Assignment).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_generic_4xx_5xx"
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "422":
+          description: |
+            Unprocessable Entity; The request body is invlaid. The error message will
+            specify which fields are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_422_unprocesable_entity"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedAssignment"
+      tags:
+        - assignments
+    delete:
+      summary: Delete an Assignment
+      operationId: deleteAssignment
+      parameters:
+        - name: assignmentId
+          in: path
+          schema:
+            $ref: "#/components/schemas/id"
+          required: true
+      responses:
+        "400":
+          description: |
+            Not Found; The requested Assignment could not be found.
+            (You may not be authorized to read this Assignment).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_generic_4xx_5xx"
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "204":
+          description: Success! The Assignment has been deleted.
+      tags:
+        - assignments
+
+  # milestones
+  /milestones:
+    get:
+      summary: List all Milestones
+      operationId: listMilestones
+      parameters:
+        - name: end_date
+          in: query
+          schema:
+            $ref: "#/components/schemas/date"
+          required: false
+        - name: start_date
+          in: query
+          schema:
+            $ref: "#/components/schemas/date"
+          required: false
+      responses:
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/http_error_401_unauthorized"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WrappedArrayOfMilestones"
+      tags:
+        - milestones
+
 components:
   schemas:
-    CurrentUser:
+    # errors
+    http_error_generic_4xx_5xx:
+      type: object
+      properties:
+        error_code:
+          $ref: "#/components/schemas/http_error_code"
+        error_name:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: The requested resource could not be found.
+    http_error_401_unauthorized:
+      type: object
+      properties:
+        reason:
+          type: string
+          example: "non-existent-token"
+        account_id:
+          type: string
+          example: "503730"
+    http_error_422_unprocesable_entity:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+          example:
+            - "Allocation can't be blank"
+
+    # other generic types
+    http_error_code:
+      type: integer
+      format: int32
+      minimum: 100
+      maximum: 600
+      exclusiveMaximum: true
+      example: 404
+    date:
+      type: string
+      format: date
+      example: "2020-05-02"
+    datetime:
+      type: string
+      format: date-time
+      example: "2020-05-02T17:32:28Z"
+    id:
+      type: integer
+      format: int32
+      minimum: 1
+      example: 81234
+
+    # whoami
+    whoami_response:
+      type: object
+      properties:
+        current_user:
+          type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/id"
+            account_ids:
+              type: array
+              items:
+                $ref: "#/components/schemas/id"
+              example: [503730, 528405, 690203]
+
+    # people
+    Person:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-        account_ids:
+          $ref: "#/components/schemas/id"
+        first_name:
+          type: string
+          example: Cyril
+        last_name:
+          type: string
+          example: Gabathuler
+        email:
+          type: string
+          format: email
+          example: "cyril@3ap.ch"
+        login:
+          type: string
+          example: enabled
+        admin:
+          type: boolean
+          example: true
+        archived:
+          type: boolean
+          example: true
+        subscribed:
+          type: boolean
+          example: true
+        avatar_url:
+          type: string # url
+          example: "https://secure.gravatar.com/avatar/7e41734571202f3a09a767a6dcbd87e2.jpg?s=200&d=https://d3s3969qhosaug.cloudfront.net/default-avatars/4347.png"
+        roles:
           type: array
           items:
-            type: integer
-    People:
+            type: string
+            example:
+              - Full Stack LV3
+              - Switzerland
+        updated_at:
+          $ref: "#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "#/components/schemas/id"
+        harvest_user_id:
+          $ref: "#/components/schemas/id"
+        weekly_capacity:
+          type: number
+          example: 151200
+        working_days:
+          type: object
+          properties:
+            monday:
+              type: boolean
+              example: true
+            tuesday:
+              type: boolean
+              example: true
+            wednesday:
+              type: boolean
+              example: true
+            thursday:
+              type: boolean
+              example: true
+            friday:
+              type: boolean
+              example: true
+        color_blind:
+          type: boolean
+          example: true
+        personal_feed_token_id:
+          type: string # TODO real type unknown; all examples were null
+    WrappedPerson:
+      type: object
+      properties:
+        person:
+          $ref: "#/components/schemas/Person"
+    WrappedArrayOfPeople:
       type: object
       properties:
         people:
           type: array
           items:
-            $ref: '#/components/schemas/Person'
-    Person:
+            $ref: "#/components/schemas/Person"
+
+    # projects
+    Project:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-        first_name:
+          $ref: "#/components/schemas/id"
+        name:
           type: string
-        last_name:
-            type: string
-        email:
-            type: string
-        login:
-            type: string
-            description: Login Status
-            enum:
-            - enabled
-            - disabled
-        admin:
-            type: boolean
+          example: Time Off
+        color:
+          type: string
+          example: black
+        code:
+          type: string
+          example: SURF
+        notes:
+          type: string
+          example: "Adcubum wants 3AP to provide a Frontend Application"
+        start_date:
+          $ref: "#/components/schemas/date"
+        end_date:
+          $ref: "#/components/schemas/date"
+        harvest_id:
+          $ref: "#/components/schemas/id"
         archived:
-            type: boolean
-        subscribed:
-            type: boolean
-        avatar_url:
-            type: string
-        roles:
-            type: array
-            items:
-                type: string
-        updated_at: 
-            type: string
-            format: date-time
+          type: boolean
+          example: false
+        updated_at:
+          $ref: "#/components/schemas/datetime"
         updated_by_id:
-            type: integer
-            format: int64
-        harvest_user_id:
-            type: integer
-            format: int64
-        weekly_capacity:
-            type: integer
-            format: int64
-        working_days:
-          type: object
-          additionalProperties:
-            type: boolean
-        color_blind: 
-            type: boolean
-        personal_feed_token_id:
-            type: integer
-            format: int64   
-    ApiResponse:
+          $ref: "#/components/schemas/id"
+        client_id:
+          $ref: "#/components/schemas/id"
+        tags:
+          type: array
+          items:
+            type: string
+            example:
+              - Adcubum
+              - Frontend
+    WrappedProject:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        type:
+        project:
+          $ref: "#/components/schemas/Project"
+    WrappedArrayOfProjects:
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: "#/components/schemas/Project"
+
+    # clients
+    Client:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
           type: string
-        message:
+          example: "3AP AG"
+        harvest_id:
+          $ref: "#/components/schemas/id"
+        archived:
+          type: boolean
+          example: false
+        updated_at:
+          $ref: "#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "#/components/schemas/id"
+    WrappedClient:
+      type: object
+      properties:
+        client:
+          $ref: "#/components/schemas/Client"
+    WrappedArrayOfClients:
+      type: object
+      properties:
+        clients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Client"
+
+    # roles
+    Role:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
           type: string
+          example: "z Remote"
+        placeholder_ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/id"
+        person_ids:
+          type: array
+          items:
+            $ref: "#/components/schemas/id"
+          example:
+            - 358173
+            - 38133
+        harvest_role_id:
+          $ref: "#/components/schemas/id"
+    WrappedArrayOfRoles:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+
+    # placeholders
+    Placeholder:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
+          type: string
+          example: Andrew
+        archived:
+          type: boolean
+          example: false
+        roles:
+          type: array
+          items:
+            type: string
+          example:
+            - Switzerland
+        updated_at:
+          $ref: "#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "#/components/schemas/id"
+    WrappedArrayOfPlaceholders:
+      type: object
+      properties:
+        placeholders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Placeholder"
+
+    # assignments
+    Assignment:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        start_date:
+          $ref: "#/components/schemas/date"
+        end_date:
+          $ref: "#/components/schemas/date"
+        allocation:
+          $ref: "#/components/schemas/id"
+        notes:
+          type: string # TODO type unknown; no non-null data in response
+        updated_at:
+          $ref: "#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "#/components/schemas/id"
+        project_id:
+          $ref: "#/components/schemas/id"
+        person_id:
+          $ref: "#/components/schemas/id"
+        placeholder_id:
+          $ref: "#/components/schemas/id" # type guessed
+        repeated_assignment_set_id:
+          $ref: "#/components/schemas/id"
+        active_on_days_off:
+          type: boolean
+          example: false
+    WrappedAssignment:
+      type: object
+      properties:
+        assignment:
+          $ref: "#/components/schemas/Assignment"
+    WrappedArrayOfAssignments:
+      type: object
+      properties:
+        assignments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Assignment"
+    assignment_create_body:
+      type: object
+      properties:
+        assignment:
+          type: object
+          properties:
+            start_date:
+              $ref: "#/components/schemas/date"
+            end_date:
+              $ref: "#/components/schemas/date"
+            allocation:
+              type: number
+              example: 30240
+            active_on_days_off:
+              type: boolean
+              example: false
+            repeated_assignment_set_id:
+              type: string # type guessed
+            project_id:
+              type: string
+              example: "1483128"
+            person_id:
+              type: string
+              example: "80452"
+            placeholder_id:
+              type: string
+              example: "17354173"
+
+    # milestones
+    Milestone:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
+          type: string
+          example: New Milestone
+        date:
+          $ref: "#/components/schemas/date"
+        updated_at:
+          $ref: "#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "#/components/schemas/id"
+        project_id:
+          $ref: "#/components/schemas/id"
+    WrappedArrayOfMilestones:
+      type: object
+      properties:
+        milestones:
+          type: array
+          items:
+            $ref: "#/components/schemas/Milestone"
+
   securitySchemes:
     forecast_auth:
+      description: |
+        This API uses OAuth2, with the Authorization Code flow, to authenticate.
+        See the docs at https://help.getharvest.com/api-v2/authentication-api/authentication/authentication/
       type: http
       scheme: bearer
+      bearerFormat: JWT
     forecast_account_id:
       type: apiKey
       name: forecast-account-id
