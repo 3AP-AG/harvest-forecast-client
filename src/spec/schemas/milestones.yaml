@@ -1,0 +1,25 @@
+components:
+  schemas:
+    Milestone:
+      type: object
+      properties:
+        id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        name:
+          type: string
+          example: New Milestone
+        date:
+          $ref: "./_generic.yaml#/components/schemas/date"
+        updated_at:
+          $ref: "./_generic.yaml#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        project_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+    WrappedArrayOfMilestones:
+      type: object
+      properties:
+        milestones:
+          type: array
+          items:
+            $ref: "#/components/schemas/Milestone"

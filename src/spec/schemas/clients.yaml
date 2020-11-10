@@ -1,0 +1,31 @@
+components:
+  schemas:
+    Client:
+      type: object
+      properties:
+        id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        name:
+          type: string
+          example: "3AP AG"
+        harvest_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        archived:
+          type: boolean
+          example: false
+        updated_at:
+          $ref: "./_generic.yaml#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+    WrappedClient:
+      type: object
+      properties:
+        client:
+          $ref: "#/components/schemas/Client"
+    WrappedArrayOfClients:
+      type: object
+      properties:
+        clients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Client"

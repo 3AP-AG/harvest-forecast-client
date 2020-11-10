@@ -1,0 +1,32 @@
+components:
+  schemas:
+    4xx_5xx_generic_error:
+      type: object
+      properties:
+        error_code:
+          $ref: "./_generic.yaml#/components/schemas/http_error_code"
+        error_name:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: The requested resource could not be found.
+
+    401_unauthorized_error:
+      type: object
+      properties:
+        reason:
+          type: string
+          example: "non-existent-token"
+        account_id:
+          $ref: "./_generic.yaml#/components/schemas/http_error_code"
+
+    422_unprocessable_entity:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+          example:
+            - "Allocation can't be blank"

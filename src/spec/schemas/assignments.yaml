@@ -1,0 +1,69 @@
+components:
+  schemas:
+    Assignment:
+      type: object
+      properties:
+        id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        start_date:
+          $ref: "./_generic.yaml#/components/schemas/date"
+        end_date:
+          $ref: "./_generic.yaml#/components/schemas/date"
+        allocation:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        notes:
+          type: string # TODO type unknown; no non-null data in response
+        updated_at:
+          $ref: "./_generic.yaml#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        project_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        person_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        placeholder_id:
+          $ref: "./_generic.yaml#/components/schemas/id" # TODO type guessed
+        repeated_assignment_set_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        active_on_days_off:
+          type: boolean
+          example: false
+    WrappedAssignment:
+      type: object
+      properties:
+        assignment:
+          $ref: "#/components/schemas/Assignment"
+    WrappedArrayOfAssignments:
+      type: object
+      properties:
+        assignments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Assignment"
+    assignment_create_body:
+      type: object
+      properties:
+        assignment:
+          type: object
+          properties:
+            start_date:
+              $ref: "./_generic.yaml#/components/schemas/date"
+            end_date:
+              $ref: "./_generic.yaml#/components/schemas/date"
+            allocation:
+              type: number
+              example: 30240
+            active_on_days_off:
+              type: boolean
+              example: false
+            repeated_assignment_set_id:
+              type: string # TODO: type guessed
+            project_id:
+              type: string
+              example: "1483128"
+            person_id:
+              type: string
+              example: "80452"
+            placeholder_id:
+              type: string
+              example: "17354173"

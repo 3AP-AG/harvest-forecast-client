@@ -1,0 +1,30 @@
+components:
+  schema:
+    Placeholder:
+      type: object
+      properties:
+        id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        name:
+          type: string
+          example: Andrew
+        archived:
+          type: boolean
+          example: false
+        roles:
+          type: array
+          items:
+            type: string
+          example:
+            - Switzerland
+        updated_at:
+          $ref: "./_generic.yaml#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+    WrappedArrayOfPlaceholders:
+      type: object
+      properties:
+        placeholders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Placeholder"

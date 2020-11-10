@@ -1,0 +1,22 @@
+components:
+  schemas:
+    http_error_code:
+      type: integer
+      format: int32
+      minimum: 100
+      maximum: 600
+      exclusiveMaximum: true
+      example: 404
+    date:
+      type: string
+      format: date
+      example: "2020-05-02"
+    datetime:
+      type: string
+      format: date-time
+      example: "2020-05-02T17:32:28Z"
+    id:
+      type: integer
+      format: int32
+      minimum: 1
+      example: 81234

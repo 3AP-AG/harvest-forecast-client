@@ -1,0 +1,53 @@
+components:
+  schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        name:
+          type: string
+          example: Time Off
+        color:
+          type: string
+          example: black
+        code:
+          type: string
+          example: SURF
+        notes:
+          type: string
+          example: "Adcubum wants 3AP to provide a Frontend Application"
+        start_date:
+          $ref: "./_generic.yaml#/components/schemas/date"
+        end_date:
+          $ref: "./_generic.yaml#/components/schemas/date"
+        harvest_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        archived:
+          type: boolean
+          example: false
+        updated_at:
+          $ref: "./_generic.yaml#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        client_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        tags:
+          type: array
+          items:
+            type: string
+            example:
+              - Adcubum
+              - Frontend
+    WrappedProject:
+      type: object
+      properties:
+        project:
+          $ref: "#/components/schemas/Project"
+    WrappedArrayOfProjects:
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: "#/components/schemas/Project"

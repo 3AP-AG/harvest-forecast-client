@@ -1,0 +1,15 @@
+components:
+  schemas:
+    whoami_response:
+      type: object
+      properties:
+        current_user:
+          type: object
+          properties:
+            id:
+              $ref: "./_generic.yaml#/components/schemas/id"
+            account_ids:
+              type: array
+              items:
+                $ref: "./_generic.yaml#/components/schemas/id"
+              example: [503730, 528405, 690203]

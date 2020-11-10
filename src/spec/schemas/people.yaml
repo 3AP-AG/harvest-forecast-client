@@ -1,0 +1,83 @@
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        first_name:
+          type: string
+          example: Cyril
+        last_name:
+          type: string
+          example: Gabathuler
+        email:
+          type: string
+          format: email
+          example: "cyril@3ap.ch"
+        login:
+          type: string
+          example: enabled
+        admin:
+          type: boolean
+          example: true
+        archived:
+          type: boolean
+          example: true
+        subscribed:
+          type: boolean
+          example: true
+        avatar_url:
+          type: string # url
+          example: "https://secure.gravatar.com/avatar/7e41734571202f3a09a767a6dcbd87e2.jpg"
+        roles:
+          type: array
+          items:
+            type: string
+            example:
+              - Full Stack LV3
+              - Switzerland
+        updated_at:
+          $ref: "./_generic.yaml#/components/schemas/datetime"
+        updated_by_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        harvest_user_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        weekly_capacity:
+          type: number
+          example: 151200
+        working_days:
+          type: object
+          properties:
+            monday:
+              type: boolean
+              example: true
+            tuesday:
+              type: boolean
+              example: true
+            wednesday:
+              type: boolean
+              example: true
+            thursday:
+              type: boolean
+              example: true
+            friday:
+              type: boolean
+              example: true
+        color_blind:
+          type: boolean
+          example: true
+        personal_feed_token_id:
+          type: string # TODO real type unknown; all examples were null
+    WrappedPerson:
+      type: object
+      properties:
+        person:
+          $ref: "#/components/schemas/Person"
+    WrappedArrayOfPeople:
+      type: object
+      properties:
+        people:
+          type: array
+          items:
+            $ref: "#/components/schemas/Person"

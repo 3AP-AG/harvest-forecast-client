@@ -1,0 +1,30 @@
+components:
+  schemas:
+    Role:
+      type: object
+      properties:
+        id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+        name:
+          type: string
+          example: "z Remote"
+        placeholder_ids:
+          type: array
+          items:
+            $ref: "./_generic.yaml#/components/schemas/id"
+        person_ids:
+          type: array
+          items:
+            $ref: "./_generic.yaml#/components/schemas/id"
+          example:
+            - 358173
+            - 38133
+        harvest_role_id:
+          $ref: "./_generic.yaml#/components/schemas/id"
+    WrappedArrayOfRoles:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
