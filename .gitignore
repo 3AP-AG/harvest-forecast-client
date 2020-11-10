@@ -218,3 +218,4 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/intellij,node
 
 .idea/ # we don't include any intellij config in our repo
+out.spec.yaml # convenient generic file location for testing the ref building logic
