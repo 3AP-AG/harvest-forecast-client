@@ -1,0 +1,70 @@
+# /clients
+clients:
+  get:
+    summary: Lias all clients
+    operationId: listClients
+    parameters:
+      - name: forecast-account-id
+        in: header
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: true
+    responses:
+      "401":
+        description: |
+          Unauthorized; One or both of the Authorization (bearer token) or
+          forecast-account-id headers was bad, or rejected.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/401_unauthorized_error"
+      "200":
+        description: Success!
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/clients.yaml#/components/schemas/WrappedArrayOfClients"
+    tags:
+      - clients
+
+# /clients/{clientId}
+client-by-id:
+  get:
+      summary: Read a Client
+      operationId: readClient
+      parameters:
+        - name: clientId
+          in: path
+          schema:
+            $ref: "../schemas/_generic.yaml#/components/schemas/id"
+          required: true
+        - name: forecast-account-id
+          in: header
+          schema:
+            $ref: "../schemas/_generic.yaml#/components/schemas/id"
+          required: true
+      responses:
+        "400":
+          description: |
+            Not Found; The requested Client could not be found.
+            (You may not be authorized to read this Client).
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/_errors.yaml#/components/schemas/4xx_5xx_generic_error"
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/_errors.yaml#/components/schemas/401_unauthorized_error"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/clients.yaml#/components/schemas/WrappedClient"
+      tags:
+        - clients

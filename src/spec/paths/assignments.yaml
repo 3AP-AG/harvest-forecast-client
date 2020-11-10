@@ -1,0 +1,175 @@
+# /assignments
+assignments:
+  get:
+    summary: List all Assignments
+    operationId: listAssignments
+    parameters:
+      # headers
+      - name: forecast-account-id
+        in: header
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: true
+      # query params
+      - name: start_date
+        in: query
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/date"
+        required: false
+      - name: state
+        in: query
+        schema:
+          type: string
+          example: "active"
+        required: false
+      - name: project_id
+        in: query
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: false
+      - name: repeated_assignment_set_id
+        in: query
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+    responses:
+      "401":
+        description: |
+          Unauthorized; One or both of the Authorization (bearer token) or
+          forecast-account-id headers was bad, or rejected.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/401_unauthorized_error"
+      "200":
+        description: Success!
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/assignments.yaml#/components/schemas/WrappedArrayOfAssignments"
+    tags:
+      - assignments
+  post:
+    summary: Create an Assignment
+    operationId: createAssignment
+    parameters:
+      - name: forecast-account-id
+        in: header
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: true
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/assignments.yaml#/components/schemas/assignment_create_body"
+      required: false
+    responses:
+      "401":
+        description: |
+          Unauthorized; One or both of the Authorization (bearer token) or
+          forecast-account-id headers was bad, or rejected.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/401_unauthorized_error"
+      "200":
+        description: Success!
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/assignments.yaml#/components/schemas/WrappedAssignment"
+    tags:
+      - assignments
+
+# /assignments/{assignmentId}
+assignment-by-id:
+  patch:
+    summary: Update an Assignment
+    operationId: updateAssignment
+    parameters:
+      - name: forecast-account-id
+        in: header
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: true
+      - name: assignmentId
+        in: path
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: true
+    requestBody:
+      description: |
+        A partial Assignment. Fields can be omitted if they do not need to be updated.
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/assignments.yaml#/components/schemas/assignment_create_body"
+      required: true
+    responses:
+      "400":
+        description: |
+          Not Found; The requested Assignment could not be found.
+          (You may not be authorized to read this Assignment).
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/4xx_5xx_generic_error"
+      "401":
+        description: |
+          Unauthorized; One or both of the Authorization (bearer token) or
+          forecast-account-id headers was bad, or rejected.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/401_unauthorized_error"
+      "422":
+        description: |
+          Unprocessable Entity; The request body is invlaid. The error message will
+          specify which fields are invalid.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/422_unprocessable_entity"
+      "200":
+        description: Success!
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/assignments.yaml#/components/schemas/WrappedAssignment"
+    tags:
+      - assignments
+  delete:
+    summary: Delete an Assignment
+    operationId: deleteAssignment
+    parameters:
+      - name: forecast-account-id
+        in: header
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: true
+      - name: assignmentId
+        in: path
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: true
+    responses:
+      "400":
+        description: |
+          Not Found; The requested Assignment could not be found.
+          (You may not be authorized to read this Assignment).
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/4xx_5xx_generic_error"
+      "401":
+        description: |
+          Unauthorized; One or both of the Authorization (bearer token) or
+          forecast-account-id headers was bad, or rejected.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/401_unauthorized_error"
+      "204":
+        description: Success! The Assignment has been deleted.
+    tags:
+      - assignments

@@ -1,0 +1,70 @@
+# /projects
+projects:
+  get:
+    summary: List all Projects
+    operationId: listProjects
+    parameters:
+      - name: forecast-account-id
+        in: header
+        schema:
+          $ref: "../schemas/_generic.yaml#/components/schemas/id"
+        required: true
+    responses:
+      "401":
+        description: |
+          Unauthorized; One or both of the Authorization (bearer token) or
+          forecast-account-id headers was bad, or rejected.
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/_errors.yaml#/components/schemas/401_unauthorized_error"
+      "200":
+        description: Success!
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/projects.yaml#/components/schemas/WrappedArrayOfProjects"
+    tags:
+      - projects
+
+# /projects/{projectId}
+project-by-id:
+    get:
+      summary: Read a single Project
+      operationId: readProject
+      parameters:
+        - name: projectId
+          in: path
+          schema:
+            $ref: "../schemas/_generic.yaml#/components/schemas/id"
+          required: true
+        - name: forecast-account-id
+          in: header
+          schema:
+            $ref: "../schemas/_generic.yaml#/components/schemas/id"
+          required: true
+      responses:
+        "400":
+          description: |
+            Not Found; The requested Project could not be found.
+            (You may not be authorized to read this Project).
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/_errors.yaml#/components/schemas/4xx_5xx_generic_error"
+        "401":
+          description: |
+            Unauthorized; One or both of the Authorization (bearer token) or
+            forecast-account-id headers was bad, or rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/_errors.yaml#/components/schemas/401_unauthorized_error"
+        "200":
+          description: Success!
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/projects.yaml#/components/schemas/WrappedProject"
+      tags:
+        - projects
