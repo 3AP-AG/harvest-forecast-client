@@ -13,6 +13,7 @@
     "pretty:check": "prettier --check './src/spec/**/*.yaml'",
     "pretty:write": "prettier --write './src/spec/**/*.yaml'",
     "lint": "scripts/lint.sh",
-    "serve": "scripts/serve.sh"
+    "serve": "scripts/serve.sh",
+    "resolve": "scripts/resolve.sh"
   }
 }
