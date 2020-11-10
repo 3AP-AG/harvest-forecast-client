@@ -14,6 +14,7 @@
     "pretty:write": "prettier --write './src/spec/**/*.yaml'",
     "lint": "scripts/lint.sh",
     "serve": "scripts/serve.sh",
-    "resolve": "scripts/resolve.sh"
+    "resolve": "scripts/resolve.sh",
+    "resolve:for-mvn": "scripts/resolve.sh ./src/main/resources/harvest-forecast-api.yaml"
   }
 }
