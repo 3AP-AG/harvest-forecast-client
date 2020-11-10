@@ -12,6 +12,6 @@
   "scripts": {
     "pretty:check": "prettier --check './src/spec/**/*.yaml'",
     "pretty:write": "prettier --write './src/spec/**/*.yaml'",
-    "speccy:lint": "speccy lint './src/spec/harvest-forcast.oas3.yaml'"
+    "lint": "scripts/lint.sh"
   }
 }
