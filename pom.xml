@@ -11,11 +11,12 @@
 	</parent>
 	<groupId>aaap.ch.harvest-forecast-client</groupId>
 	<artifactId>harvest-forecast-client</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${revision}</version>
 	<name>harvest-forecast-client</name>
 	<description>Client for Harvest Forecast</description>
 
 	<properties>
+		<revision>1.0.0-SNAPSHOT</revision>
 		<java.version>11</java.version>
 		<swagger-annotations-version>1.6.2</swagger-annotations-version>
 		<google-code-findbugs-version>3.0.2</google-code-findbugs-version>
