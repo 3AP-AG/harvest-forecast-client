@@ -116,6 +116,7 @@
 
 	<build>
 		<plugins>
+            <!-- Sign jar files (Maven central publishing requirement) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -127,9 +128,12 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+                        <!-- From https://github.com/actions/setup-java#extra-setup-for-pomxml -->
                         <configuration>
-                            <!-- Prevent gpg from using pinentry programs -->
                             <gpgArguments>
+                                <!-- Don't open a TTY -->
+                                <arg>--batch</arg>
+                                <!-- Prevent gpg from using pinentry programs -->
                                 <arg>--pinentry-mode</arg>
                                 <arg>loopback</arg>
                             </gpgArguments>
@@ -137,6 +141,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Maven Central requirement -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -149,6 +154,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Maven Central requirement -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
