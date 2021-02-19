@@ -25,7 +25,8 @@ jobs:
 
     - name: Get version tag
       id: vars
-      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+#      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      run: echo 1.0.2-SNAPSHOT
 
     - name: Echo version
       run: echo ${{ steps.vars.outputs.tag }}
