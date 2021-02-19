@@ -24,6 +24,21 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <name>James Young</name>
+            <email>james@3ap.ch</email>
+            <organization>3AP AG</organization>
+            <organizationUrl>https://3ap.ch/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Cyril Gabathuler</name>
+            <email>cyril@3ap.ch</email>
+            <organization>3AP AG</organization>
+            <organizationUrl>https://3ap.ch/</organizationUrl>
+        </developer>
+    </developers>
+
     <scm>
         <url>https://github.com/3AP-AG/harvest-forecast-client</url>
     </scm>
@@ -101,6 +116,30 @@
 
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
