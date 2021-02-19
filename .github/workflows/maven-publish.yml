@@ -26,10 +26,18 @@ jobs:
     - name: Get version tag
       id: vars
 #      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-      run: echo 1.0.2-SNAPSHOT
+      run: echo ::set-output name=tag::1.0.2-SNAPSHOT
 
     - name: Echo version
       run: echo ${{ steps.vars.outputs.tag }}
+
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
 
     - name: Build with Maven
       run: mvn -Drevision=${{ steps.vars.outputs.tag }} -B package --file pom.xml
