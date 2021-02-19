@@ -6,9 +6,7 @@ name: Maven Package and Publish
 env:
   JAVA_VERSION: 11
 
-on:
-  release:
-    types: [created]
+on: push
 
 jobs:
   build:
