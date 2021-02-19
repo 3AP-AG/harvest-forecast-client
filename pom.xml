@@ -131,8 +131,6 @@
                         <!-- From https://github.com/actions/setup-java#extra-setup-for-pomxml -->
                         <configuration>
                             <gpgArguments>
-                                <!-- Don't open a TTY -->
-                                <arg>--batch</arg>
                                 <!-- Prevent gpg from using pinentry programs -->
                                 <arg>--pinentry-mode</arg>
                                 <arg>loopback</arg>
