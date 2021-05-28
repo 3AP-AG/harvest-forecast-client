@@ -293,7 +293,12 @@ paths:
           in: query
           schema:
             $ref: "#/components/schemas/date"
-          required: false
+          required: true
+        - name: end_date
+          in: query
+          schema:
+            $ref: "#/components/schemas/date"
+          required: true
         - name: state
           in: query
           schema:
