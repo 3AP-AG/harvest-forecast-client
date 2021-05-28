@@ -120,7 +120,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -128,15 +128,6 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
-                        <!-- From https://github.com/actions/setup-java#extra-setup-for-pomxml -->
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--verbose</arg>
-                                <!-- Prevent gpg from using pinentry programs -->
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
