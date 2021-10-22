@@ -9,14 +9,42 @@
 		<version>2.3.5.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>aaap.ch.harvest-forecast-client</groupId>
+	<groupId>ch.aaap.harvest-forecast-client</groupId>
 	<artifactId>harvest-forecast-client</artifactId>
 	<version>${revision}</version>
 	<name>harvest-forecast-client</name>
 	<description>Client for Harvest Forecast</description>
+    <url>https://github.com/3AP-AG/harvest-forecast-client</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>James Young</name>
+            <email>james@3ap.ch</email>
+            <organization>3AP AG</organization>
+            <organizationUrl>https://3ap.ch/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Cyril Gabathuler</name>
+            <email>cyril@3ap.ch</email>
+            <organization>3AP AG</organization>
+            <organizationUrl>https://3ap.ch/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/3AP-AG/harvest-forecast-client</url>
+    </scm>
 
 	<properties>
-		<revision>1.0.0-SNAPSHOT</revision>
+		<revision>1.0.2-SNAPSHOT</revision>
 		<java.version>11</java.version>
 		<swagger-annotations-version>1.6.2</swagger-annotations-version>
 		<google-code-findbugs-version>3.0.2</google-code-findbugs-version>
@@ -88,6 +116,47 @@
 
 	<build>
 		<plugins>
+            <!-- Sign jar files (Maven central publishing requirement) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven Central requirement -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven Central requirement -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
@@ -113,5 +182,22 @@
 			</plugin>
 		</plugins>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>mavenCentral</id>
+            <distributionManagement>
+                <repository>
+                    <id>ossrh</id>
+                    <name>Central Repository OSSRH</name>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>
