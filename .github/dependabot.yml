@@ -5,10 +5,13 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
+      time: "04:00"
+      
 
   # Maintain dependencies for maven
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
+      time: "04:00"
