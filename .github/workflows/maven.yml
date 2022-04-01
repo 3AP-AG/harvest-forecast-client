@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
 
     - name: Set up JDK
@@ -52,7 +52,7 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/develop'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
@@ -79,7 +79,7 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/develop'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download build
         uses: actions/download-artifact@v2
         with:
