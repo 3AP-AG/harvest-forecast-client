@@ -7,7 +7,10 @@ updates:
     schedule:
       interval: "monthly"
       time: "04:00"
-      
+    open-pull-requests-limit: 10
+    reviewers:
+    - "3AP-AG/3ap-admin"
+
 
   # Maintain dependencies for maven
   - package-ecosystem: "maven"
@@ -15,3 +18,6 @@ updates:
     schedule:
       interval: "monthly"
       time: "04:00"
+    open-pull-requests-limit: 10
+    reviewers:
+    - "3AP-AG/3ap-admin"
